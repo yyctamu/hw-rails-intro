@@ -30,18 +30,20 @@ class MoviesController < ApplicationController
       end 
       
       if not params[:sort]==session[:sort] 
-        params[:sort] = session[:sort] = @items_sort
         params[:ratings] = session[:ratings] = @entire_ratings
+        params[:sort] = session[:sort] = @items_sort
         
         flash.keep
+        
         redirect_to movies_path(:sort=>params[:sort],:ratings=>params[:ratings])
       end 
       
       if not params[:ratings]==session[:ratings]
-        params[:sort] = session[:sort] = @items_sort
         params[:ratings] = session[:ratings] = @entire_ratings
+        params[:sort] = session[:sort] = @items_sort
         
         flash.keep
+        
         redirect_to movies_path(:sort=>params[:sort],:ratings=>params[:ratings])
       end
         
