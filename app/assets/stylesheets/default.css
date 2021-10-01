@@ -1,0 +1,6 @@
+/*yellow-orange background setting for column header */
+/*https://www.colorhexa.com/ffae42*/
+
+table#movies th.hilite {
+  background-color: #ffae42;
+}

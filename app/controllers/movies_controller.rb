@@ -7,7 +7,44 @@ class MoviesController < ApplicationController
     end
   
     def index
-      @movies = Movie.all
+    # Part 2 and Part 3 Section 
+      @items_sort = params[:sort] or session[:sort]
+      @movies_ratings = Movie.ratings
+      
+      
+      @entire_ratings =  params[:ratings] or session[:ratings]
+      
+      if not @entire_ratings
+        session[:ratings] = {}
+        
+        for rating in @movies_ratings
+          session[:ratings][rating] = 1
+        end
+        
+        @entire_ratings = session[:ratings]
+      end
+      
+      @movies = Movie.order(@items_sort)
+      if @entire_ratings
+        @movies = Movie.where(:rating=> @entire_ratings.keys).order(@items_sort)
+      end 
+      
+      if not params[:sort]==session[:sort] 
+        params[:sort] = session[:sort] = @items_sort
+        params[:ratings] = session[:ratings] = @entire_ratings
+        
+        flash.keep
+        redirect_to movies_path(:sort=>params[:sort],:ratings=>params[:ratings])
+      end 
+      
+      if not params[:ratings]==session[:ratings]
+        params[:sort] = session[:sort] = @items_sort
+        params[:ratings] = session[:ratings] = @entire_ratings
+        
+        flash.keep
+        redirect_to movies_path(:sort=>params[:sort],:ratings=>params[:ratings])
+      end
+        
     end
   
     def new
@@ -44,4 +81,4 @@ class MoviesController < ApplicationController
     def movie_params
       params.require(:movie).permit(:title, :rating, :description, :release_date)
     end
-  end
+  end 
